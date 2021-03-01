@@ -11,4 +11,9 @@ public class DigitsPrinter {
     protected void printAnswer() {
         System.out.printf("%s = 0b%s", digitToPrint, Integer.toBinaryString(digitToPrint));
     }
+
+    protected void covertAndPrintLastDigit() {
+        String octal = Integer.toOctalString(digitToPrint);
+        System.out.printf("%s", octal.charAt(octal.length() - 1));
+    }
 }
