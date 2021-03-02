@@ -19,17 +19,14 @@ public class DigitsConverseAndPrinter {
             System.out.printf("%s", Integer.toString(length, data.getBaseToConvert()));
         } else if (data.getBaseToConvert() == 1) {
             StringBuilder sb = new StringBuilder();
-            int value = Integer.parseInt(Integer.toString(data.getDigit()), 10);
+            int value = Integer.parseInt(data.getDigit(), 10);
             for (int i = 0; i < value; i++) {
                 sb.append("1");
             }
             System.out.printf("%s", sb.toString());
         } else {
-            System.out.println(data.getDigit());
-            System.out.println(data.getBase());
-            System.out.println(data.getBaseToConvert());
-            System.out.println("---");
-            int value = Integer.parseInt(Integer.toString(data.getDigit(), data.getBase()));
+
+            int value = Integer.parseInt(data.getDigit(), data.getBase());
             System.out.printf("%s", Integer.toString(value, data.getBaseToConvert()));
         }
     }
@@ -59,15 +56,15 @@ public class DigitsConverseAndPrinter {
         }
     }
 
-    private void printBinView(int digit) {
-        System.out.printf("0b%s", Long.toBinaryString(digit));
+    private void printBinView(String digit) {
+        System.out.printf("0b%s", digit);
     }
 
-    private void printOctalView(int digit) {
-        System.out.printf("0%s", Long.toOctalString(digit));
+    private void printOctalView(String digit) {
+        System.out.printf("0%s", digit);
     }
 
-    private void printHexView(int digit) {
-        System.out.printf("0x%s", Long.toHexString(digit));
+    private void printHexView(String digit) {
+        System.out.printf("0x%s", digit);
     }
 }

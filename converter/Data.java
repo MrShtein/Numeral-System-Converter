@@ -2,17 +2,17 @@ package converter;
 
 public class Data {
 
-    private int digit;
+    private String digit;
     private int base;
     private int baseToConvert;
 
-    public Data(int base, int digit, int baseToConvert) {
+    public Data(int base, String digit, int baseToConvert) {
         this.digit = digit;
         this.base = base;
         this.baseToConvert = baseToConvert;
     }
 
-    public int getDigit() {
+    public String getDigit() {
         return digit;
     }
 
