@@ -6,9 +6,16 @@ public class Main {
     public static void main(String[] args) {
 
         DataGrabber dataGrabber = new DataGrabber();
-        DigitsPrinter digitsPrinter = new DigitsPrinter();
         dataGrabber.grabDigitAndBase();
-        digitsPrinter.printVariant(dataGrabber.getData());
+        DigitsConverseAndPrinter digitsPrinter = new DigitsConverseAndPrinter(dataGrabber.getData());
 
+        digitsPrinter.printData();
+
+
+//        int test = 4242;
+//
+//        int out = Integer.parseInt(Integer.toString(test), 21);
+//        String in = Integer.toString(out, 6);
+//        System.out.println(in);
     }
 }

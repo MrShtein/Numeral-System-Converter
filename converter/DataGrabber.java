@@ -8,7 +8,7 @@ public class DataGrabber {
 
     public void grabDigitAndBase() {
         Scanner scanner = new Scanner(System.in);
-        data = new Data(scanner.nextInt(), scanner.nextInt());
+        data = new Data(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
     }
 
     public Data getData() {
