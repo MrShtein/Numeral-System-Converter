@@ -14,21 +14,7 @@ public class DigitsConverseAndPrinter {
     }
 
     protected void printData() {
-        if (data.getBase() == 1) {
-            int length = String.valueOf(data.getDigit()).length();
-            System.out.printf("%s", Integer.toString(length, data.getBaseToConvert()));
-        } else if (data.getBaseToConvert() == 1) {
-            StringBuilder sb = new StringBuilder();
-            int value = Integer.parseInt(data.getDigit(), 10);
-            for (int i = 0; i < value; i++) {
-                sb.append("1");
-            }
-            System.out.printf("%s", sb.toString());
-        } else {
 
-            int value = Integer.parseInt(data.getDigit(), data.getBase());
-            System.out.printf("%s", Integer.toString(value, data.getBaseToConvert()));
-        }
     }
 
     protected void printAnswer() {
