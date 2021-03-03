@@ -4,14 +4,9 @@ import java.util.Scanner;
 
 public class DataGrabber {
 
-    private Data data;
-
-    public void grabDigitAndBase() {
+    public Data grabDigitAndBase() {
         Scanner scanner = new Scanner(System.in);
-        data = new Data(scanner.nextInt(), scanner.next(), scanner.nextInt());
+        return new Data(scanner.nextInt(), scanner.next(), scanner.nextInt());
     }
 
-    public Data getData() {
-        return data;
-    }
 }
