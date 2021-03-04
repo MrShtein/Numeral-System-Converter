@@ -1,5 +1,7 @@
 package converter;
 
+import java.util.zip.DeflaterOutputStream;
+
 public class Converter {
 
     private Data data;
@@ -11,9 +13,16 @@ public class Converter {
     public String convertData() {
         String[] splitDigit = splitDigitIntoTwoParts();
         if (splitDigit[1] == null) {
-            return splitDigit[0];
+            return convertSimpleDigit(splitDigit[0]);
         }
-        String integerPart = convertIntegerPartToDecimal(splitDigit[0]);
+        if (data.getBaseToConvert() == 10) {
+            Double integerPart = convertSimpleDigit(splitDigit[0]);
+            Double fractionalPart = convertFractionalPartToDecimal(splitDigit[1]);
+            return String.format("%s.%s", integerPart, fractionalPart);
+        } else {
+
+        }
+
     }
 
     private String[] splitDigitIntoTwoParts() {
@@ -27,7 +36,7 @@ public class Converter {
         return temp;
     }
 
-    private String convertIntegerPartToDecimal(String digit) {
+    private String convertSimpleDigit(String digit) {
         if (data.getBase() == 1) {
             int length = digit.length();
             return Integer.toString(length, data.getBaseToConvert());
@@ -42,6 +51,17 @@ public class Converter {
             int value = Integer.parseInt(digit, data.getBase());
             return Integer.toString(value, data.getBaseToConvert());
         }
+    }
+
+    private String convertFractionalPartToDecimal(String digit) {
+        char[] symbolsArray = digit.toCharArray();
+        double sum = 0.0;
+        for (char ch : symbolsArray) {
+            if (Character.isLetter(ch)) {
+                sum += (double) Integer.parseInt(String.valueOf(ch), data.getBase()) / 36;
+            }
+        }
+        return Double.toString(sum);
     }
 
 }
