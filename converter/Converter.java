@@ -2,8 +2,6 @@ package converter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.concurrent.CountDownLatch;
-import java.util.zip.DeflaterOutputStream;
 
 public class Converter {
 
@@ -19,9 +17,15 @@ public class Converter {
            return convertSimpleDigit(splitDigit[0]);
         }
         if (data.getBaseToConvert() == 10) {
-            return convertToDecimal(splitDigit);
+            return String.format("%.5f", convertToDecimal(splitDigit));
         } else {
-            String[] decimalDigit = convertToDecimal(splitDigit).split("\\.");
+            String[] decimalDigit;
+            if (data.getBase() != 10) {
+                decimalDigit = String.format("%s", convertToDecimal(splitDigit)).split("\\.");
+                data.setBase(10);
+            } else {
+                decimalDigit = splitDigit;
+            }
             String integerPart = convertSimpleDigit(decimalDigit[0]);
             String fractionalPart = convertFractionalPartFromDecimal(decimalDigit[1]);
             return String.format("%s.%s", integerPart, fractionalPart);
@@ -56,11 +60,10 @@ public class Converter {
         }
     }
 
-    private String convertToDecimal(String[] splitDigit) {
+    private Double convertToDecimal(String[] splitDigit) {
         Double integerPart = (double) Integer.parseInt(splitDigit[0], data.getBase());
         Double fractionalPart = convertFractionalPartToDecimal(splitDigit[1]);
-        Double sum = integerPart + fractionalPart;
-        return String.format("%.5f",sum);
+        return integerPart + fractionalPart;
     }
 
     private Double convertFractionalPartToDecimal(String digit) {
@@ -68,8 +71,8 @@ public class Converter {
         double sum = 0.0;
         int coefficient = 1;
         for (char ch : symbolsArray) {
-            int decimalValue = Integer.parseInt(String.valueOf(ch), data.getBase());
-            sum += (double)  decimalValue / Math.pow(data.getBase(), coefficient);
+            int decimalValue = Integer.parseInt(String.valueOf(ch), 36);
+            sum += decimalValue / Math.pow(data.getBase(), coefficient);
             coefficient++;
         }
         return sum;
@@ -78,13 +81,13 @@ public class Converter {
     private String convertFractionalPartFromDecimal(String digit) {
         double temp = Double.parseDouble("0." + digit);
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < digit.length(); i++) {
-            double allSymbols = new BigDecimal(temp * data.getBaseToConvert()).setScale(digit.length(), RoundingMode.DOWN).doubleValue();
-            int fractionalSymbol = (int) Math.floor(allSymbols);
-            temp = new BigDecimal(allSymbols - fractionalSymbol).setScale(digit.length(), RoundingMode.DOWN).doubleValue();
-            sb.append(Integer.toString(fractionalSymbol, 36));
+        for (int i = 0; i < 5; i++) {
+            double allSymbols = temp * data.getBaseToConvert();
+            int fractionalSymbol = (int) allSymbols;
+            temp = allSymbols - fractionalSymbol;
+            sb.append(Integer.toString(fractionalSymbol, data.getBaseToConvert()));
         }
-        return sb.toString();
+        return sb.substring(0, 5);
     }
 
 

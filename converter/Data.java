@@ -23,4 +23,8 @@ public class Data {
     public int getBaseToConvert() {
         return baseToConvert;
     }
+
+    public void setBase(int base) {
+        this.base = base;
+    }
 }
