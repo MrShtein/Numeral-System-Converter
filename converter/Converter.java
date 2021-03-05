@@ -1,10 +1,13 @@
 package converter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.concurrent.CountDownLatch;
 import java.util.zip.DeflaterOutputStream;
 
 public class Converter {
 
-    private Data data;
+    private final Data data;
 
     public Converter(Data data) {
         this.data = data;
@@ -13,16 +16,16 @@ public class Converter {
     public String convertData() {
         String[] splitDigit = splitDigitIntoTwoParts();
         if (splitDigit[1] == null) {
-            return convertSimpleDigit(splitDigit[0]);
+           return convertSimpleDigit(splitDigit[0]);
         }
         if (data.getBaseToConvert() == 10) {
-            Double integerPart = convertSimpleDigit(splitDigit[0]);
-            Double fractionalPart = convertFractionalPartToDecimal(splitDigit[1]);
-            return String.format("%s.%s", integerPart, fractionalPart);
+            return convertToDecimal(splitDigit);
         } else {
-
+            String[] decimalDigit = convertToDecimal(splitDigit).split("\\.");
+            String integerPart = convertSimpleDigit(decimalDigit[0]);
+            String fractionalPart = convertFractionalPartFromDecimal(decimalDigit[1]);
+            return String.format("%s.%s", integerPart, fractionalPart);
         }
-
     }
 
     private String[] splitDigitIntoTwoParts() {
@@ -53,15 +56,36 @@ public class Converter {
         }
     }
 
-    private String convertFractionalPartToDecimal(String digit) {
+    private String convertToDecimal(String[] splitDigit) {
+        Double integerPart = (double) Integer.parseInt(splitDigit[0], data.getBase());
+        Double fractionalPart = convertFractionalPartToDecimal(splitDigit[1]);
+        Double sum = integerPart + fractionalPart;
+        return String.format("%.5f",sum);
+    }
+
+    private Double convertFractionalPartToDecimal(String digit) {
         char[] symbolsArray = digit.toCharArray();
         double sum = 0.0;
+        int coefficient = 1;
         for (char ch : symbolsArray) {
-            if (Character.isLetter(ch)) {
-                sum += (double) Integer.parseInt(String.valueOf(ch), data.getBase()) / 36;
-            }
+            int decimalValue = Integer.parseInt(String.valueOf(ch), data.getBase());
+            sum += (double)  decimalValue / Math.pow(data.getBase(), coefficient);
+            coefficient++;
         }
-        return Double.toString(sum);
+        return sum;
     }
+
+    private String convertFractionalPartFromDecimal(String digit) {
+        double temp = Double.parseDouble("0." + digit);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < digit.length(); i++) {
+            double allSymbols = new BigDecimal(temp * data.getBaseToConvert()).setScale(digit.length(), RoundingMode.DOWN).doubleValue();
+            int fractionalSymbol = (int) Math.floor(allSymbols);
+            temp = new BigDecimal(allSymbols - fractionalSymbol).setScale(digit.length(), RoundingMode.DOWN).doubleValue();
+            sb.append(Integer.toString(fractionalSymbol, 36));
+        }
+        return sb.toString();
+    }
+
 
 }

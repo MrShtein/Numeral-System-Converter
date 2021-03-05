@@ -5,10 +5,8 @@ public class Main {
     public static void main(String[] args) {
 
         DataGrabber dataGrabber = new DataGrabber();
-        dataGrabber.grabDigitAndBase();
-        DigitsConverseAndPrinter digitsPrinter = new DigitsConverseAndPrinter(dataGrabber.getData());
-
-        digitsPrinter.printData();
+        Converter converter = new Converter(dataGrabber.grabDigitAndBase());
+        System.out.println(converter.convertData());
 
 
 //        int test = 4242;
