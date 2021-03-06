@@ -6,12 +6,6 @@ public class Data {
     private int base;
     private int baseToConvert;
 
-    public Data(int base, String digit, int baseToConvert) {
-        this.digit = digit;
-        this.base = base;
-        this.baseToConvert = baseToConvert;
-    }
-
     public String getDigit() {
         return digit;
     }
@@ -26,5 +20,13 @@ public class Data {
 
     public void setBase(int base) {
         this.base = base;
+    }
+
+    public void setDigit(String digit) {
+        this.digit = digit;
+    }
+
+    public void setBaseToConvert(int baseToConvert) {
+        this.baseToConvert = baseToConvert;
     }
 }
